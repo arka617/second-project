@@ -1,0 +1,30 @@
+name: C Program CI
+
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Build main program
+      run: gcc main.c sum.c -o main
+
+    - name: Build test program (if test.c exists)
+      run: |
+        if [ -f test.c ]; then
+          gcc test.c sum.c -o test
+        fi
+
+    - name: Run tests (if test program exists)
+      run: |
+        if [ -f test ]; then
+          ./test
+        fi
